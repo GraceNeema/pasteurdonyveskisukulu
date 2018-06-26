@@ -9,8 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 /**
  * Created by YvonFlourAlvin on 26/06/2018.
@@ -26,14 +29,7 @@ public class BaseActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,7 +50,13 @@ public class BaseActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        accueil();
+    }
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -86,8 +88,9 @@ public class BaseActivity extends AppCompatActivity
 
         if (id == R.id.accueil) {
             // Handle the camera action
+            accueil();
         } else if (id == R.id.meditation) {
-
+            meditation();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.event) {
@@ -97,5 +100,22 @@ public class BaseActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected void accueil(){
+        ((RelativeLayout)findViewById(R.id.container)).removeAllViews();
+        View v = LayoutInflater.from(BaseActivity.this).inflate(R.layout.container_accueil, null);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(BaseActivity.this, "Cool", Toast.LENGTH_SHORT).show();
+            }
+        });
+        ((RelativeLayout)findViewById(R.id.container)).addView(v);
+    }
+    protected void meditation(){
+        ((RelativeLayout)findViewById(R.id.container)).removeAllViews();
+        View v = LayoutInflater.from(BaseActivity.this).inflate(R.layout.container_meditation, null);
+        ((RelativeLayout)findViewById(R.id.container)).addView(v);
     }
 }

@@ -54,7 +54,7 @@ public class BaseActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        accueil();
+        //accueil();
     }
     /*
     @Override
@@ -88,9 +88,9 @@ public class BaseActivity extends AppCompatActivity
 
         if (id == R.id.accueil) {
             // Handle the camera action
-            accueil();
+          //  accueil();
         } else if (id == R.id.meditation) {
-            meditation();
+            //meditation();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.event) {

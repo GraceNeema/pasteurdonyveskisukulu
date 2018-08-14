@@ -1,67 +1,48 @@
 package Adapter;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import Model.Actualité;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
+import Model.Actualite;
+import Tool.Application;
+import Tool.HttpRequest;
+import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
 
 /**
  * Created by YvonFlourAlvin on 27/06/2018.
  */
 
-public class AccueilAdapter extends RecyclerView.Adapter<AccueilAdapter.Holder>{
+public class AccueilAdapter extends RecyclerView.Adapter<AccueilAdapter.Holder> implements Application{
 
+    ArrayList<Actualite> actualites = null;
 
-    /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
-     * an item.
-     * <p>
-     * This new ViewHolder should be constructed with a new View that can represent the items
-     * of the given type. You can either create a new View manually or inflate it from an XML
-     * layout file.
-     * <p>
-     * The new ViewHolder will be used to display items of the adapter using
-     * {@link #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
-     * different items in the data set, it is a good idea to cache references to sub views of
-     * the View to avoid unnecessary {@link View#findViewById(int)} calls.
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
-     * @see #getItemViewType(int)
-     * @see #onBindViewHolder(ViewHolder, int)
-     */
-    @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public AccueilAdapter(ArrayList<Actualite> actualites) {
+        this.actualites = actualites;
+        Log.i("AccueilAdapter_info", "j'entre dans l'AccueilAdapter");
     }
 
-    /**
-     * Called by RecyclerView to display the data at the specified position. This method should
-     * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
-     * position.
-     * <p>
-     * Note that unlike {@link ListView}, RecyclerView will not call this method
-     * again if the position of the item changes in the data set unless the item itself is
-     * invalidated or the new position cannot be determined. For this reason, you should only
-     * use the <code>position</code> parameter while acquiring the related data item inside
-     * this method and should not keep a copy of it. If you need the position of an item later
-     * on (e.g. in a click listener), use {@link ViewHolder#getAdapterPosition()} which will
-     * have the updated adapter position.
-     * <p>
-     * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can
-     * handle efficient partial bind.
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
+    @Override
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.accueil_item_3, null);
+        return new Holder(view);
+    }
+
+
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-
+        holder.bind(actualites.get(position));
     }
 
     /**
@@ -71,17 +52,54 @@ public class AccueilAdapter extends RecyclerView.Adapter<AccueilAdapter.Holder>{
      */
     @Override
     public int getItemCount() {
-        return 0;
+        return actualites.size();
     }
 
     class Holder extends RecyclerView.ViewHolder{
 
+        TextView titre, message, date;
+        ImageView imageView;
+        ProgressBar load_image;
         public Holder(View itemView) {
             super(itemView);
+            titre = itemView.findViewById(R.id.titre);
+            message = itemView.findViewById(R.id.message);
+            date = itemView.findViewById(R.id.date);
+            imageView  = itemView.findViewById(R.id.image);
+            load_image = itemView.findViewById(R.id.load_image);
         }
 
-        public void bind(Actualité actu){
+        public void bind(final Actualite actu){
+            Log.i("AccueilAdapter_info", "j'entre dans le bind");
+            titre.setText(actu.getTitre());
+            message.setText(actu.getMessage());
+            date.setText(actu.getDate());
+            imageView.setVisibility(View.INVISIBLE);
+            new AsyncTask(){
 
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    Bitmap bitmap = HttpRequest.donwload_bitmap(url+actu.getImageRef());
+                    ArrayList<Object> objects1 = new ArrayList<>();
+                    objects1.add(bitmap);
+                    objects1.add(objects[0]);
+                    return  objects1;
+                }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    ArrayList<Object> objects = (ArrayList<Object>)o;
+                    if( objects.get(0) != null){
+                        Bitmap bitmap = (Bitmap)objects.get(0);
+                        WeakReference weak = (WeakReference)objects.get(1);
+                        ImageView img = (ImageView)weak.get();
+                        load_image.setVisibility(View.INVISIBLE);
+                        imageView.setVisibility(View.VISIBLE);
+                        img.setImageBitmap(bitmap);
+                    }
+                    super.onPostExecute(o);
+                }
+            }.execute(new WeakReference<ImageView>(imageView));
         }
     }
 }

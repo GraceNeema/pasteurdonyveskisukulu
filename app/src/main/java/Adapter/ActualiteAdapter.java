@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,13 +23,13 @@ import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
  * Created by YvonFlourAlvin on 27/06/2018.
  */
 
-public class AccueilAdapter extends RecyclerView.Adapter<AccueilAdapter.Holder> implements Application{
+public class ActualiteAdapter extends RecyclerView.Adapter<ActualiteAdapter.Holder> implements Application{
 
     ArrayList<Actualite> actualites = null;
 
-    public AccueilAdapter(ArrayList<Actualite> actualites) {
+    public ActualiteAdapter(ArrayList<Actualite> actualites) {
         this.actualites = actualites;
-        Log.i("AccueilAdapter_info", "j'entre dans l'AccueilAdapter");
+        Log.i("AccueilAdapter_info", "j'entre dans l'ActualiteAdapter");
     }
 
     @Override

@@ -1,5 +1,8 @@
 package pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu;
 
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,19 +14,33 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import Adapter.AccueilAdapter;
+import Model.Actualite;
+import Tool.Application;
+import Tool.HttpRequest;
 
 /**
  * Created by YvonFlourAlvin on 26/06/2018.
  */
 
 public class BaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Application {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +75,7 @@ public class BaseActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        //accueil();
+        accueil();
     }
     /*
     @Override
@@ -88,6 +105,7 @@ public class BaseActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         displaySelectedScreen(item.getItemId());
 
         return true;
@@ -120,21 +138,14 @@ public class BaseActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
-  /*  protected void accueil(){
-        ((RelativeLayout)findViewById(R.id.container)).removeAllViews();
-        View v = LayoutInflater.from(BaseActivity.this).inflate(R.layout.container_accueil, null);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(BaseActivity.this, "Cool", Toast.LENGTH_SHORT).show();
-            }
-        });
-        ((RelativeLayout)findViewById(R.id.container)).addView(v);
-    }
-    */
+
     protected void meditation(){
         ((RelativeLayout)findViewById(R.id.container)).removeAllViews();
         View v = LayoutInflater.from(BaseActivity.this).inflate(R.layout.container_meditation, null);
         ((RelativeLayout)findViewById(R.id.container)).addView(v);
+    }
+
+    public boolean canConnecte(){
+        return (((ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo() !=null && ((ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected());
     }
 }

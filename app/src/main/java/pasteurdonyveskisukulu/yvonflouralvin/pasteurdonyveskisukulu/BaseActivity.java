@@ -1,15 +1,14 @@
 package pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu;
 
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,16 +20,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import Adapter.AccueilAdapter;
+import Adapter.ActualiteAdapter;
+import Fragments.Frag_Actualite;
+import Fragments.Frag_Predication;
 import Model.Actualite;
 import Tool.Application;
 import Tool.HttpRequest;
@@ -58,8 +57,20 @@ public class BaseActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
         displaySelectedScreen(R.id.accueil);
+
+        if(getIntent().getExtras() != null){
+            switch (getIntent().getExtras().getString("origin")){
+                case "predication":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new Frag_Predication()).commit();
+                    break;
+            }
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new Frag_Actualite()).commit();
+        }
+
+
     }
 
     @Override
@@ -75,7 +86,6 @@ public class BaseActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        accueil();
     }
     /*
     @Override
@@ -138,6 +148,7 @@ public class BaseActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
+
 
     protected void meditation(){
         ((RelativeLayout)findViewById(R.id.container)).removeAllViews();

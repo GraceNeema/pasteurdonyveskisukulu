@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.PredicationDetail">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:adjustViewBounds="true"
+                android:src="@drawable/header_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image"/>
+            <TextView
+                android:id="@+id/titre"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Le titre de la predication"/>
+            <TextView
+                android:id="@+id/orateur"
+                android:textColor="#000000"
+                android:textSize="16dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Orateur : Pst. Jeremie LEVI"/>
+            <TextView
+                android:id="@+id/date"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Culte du : 12/85/2014"/>
+
+            <TextView
+                android:id="@+id/contenu"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Porro voluptas, obcaecati eaque possimus sequi veniam sit error recusandae tempora nobis eius aliquid amet dignissimos nam temporibus numquam neque. Omnis, velit!\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Porro voluptas, obcaecati eaque possimus sequi veniam sit error recusandae tempora nobis eius aliquid amet dignissimos nam temporibus numquam neque. Omnis, velit!\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Porro voluptas, obcaecati eaque possimus sequi veniam sit error recusandae tempora nobis eius aliquid amet dignissimos nam temporibus numquam neque. Omnis, velit!\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Porro voluptas, obcaecati eaque possimus sequi veniam sit error recusandae tempora nobis eius aliquid amet dignissimos nam temporibus numquam neque. Omnis, velit!\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Porro voluptas, obcaecati eaque possimus sequi veniam sit error recusandae tempora nobis eius aliquid amet dignissimos nam temporibus numquam neque. Omnis, velit!"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

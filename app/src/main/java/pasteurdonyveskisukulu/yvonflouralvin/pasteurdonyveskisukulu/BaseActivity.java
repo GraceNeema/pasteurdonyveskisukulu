@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import Adapter.ActualiteAdapter;
 import Fragments.Frag_Actualite;
+import Fragments.Frag_Predication;
 import Model.Actualite;
 import Tool.Application;
 import Tool.HttpRequest;
@@ -53,6 +54,15 @@ public class BaseActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if(getIntent().getExtras() != null){
+            switch (getIntent().getExtras().getString("origin")){
+                case "predication":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Frag_Predication()).commit();
+                    break;
+            }
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Frag_Actualite()).commit();
+        }
 
     }
 
@@ -69,7 +79,6 @@ public class BaseActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Frag_Actualite()).commit();
     }
     /*
     @Override
@@ -105,7 +114,7 @@ public class BaseActivity extends AppCompatActivity
             // Handle the camera action
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Frag_Actualite()).commit();
         } else if (id == R.id.meditation) {
-            //meditation();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Frag_Predication()).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.event) {

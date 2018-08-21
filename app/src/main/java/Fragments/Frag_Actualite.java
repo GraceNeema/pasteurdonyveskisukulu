@@ -69,7 +69,9 @@ public class Frag_Actualite extends Fragment implements Application{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         actualites = (RecyclerView)view.findViewById(R.id.actualites);
+        Log.i("Frag_Actualite_info", "Je suis dans le fragment actualite !");
         accueil(view.getContext());
+
 
     }
 
@@ -78,6 +80,7 @@ public class Frag_Actualite extends Fragment implements Application{
             ArrayList<Actualite> list_actualites = new ArrayList<>();
             @Override
             protected Object doInBackground(Object[] objects) {
+                Log.i("Frag_Actualite_info", "Je suis dans accueil doInBackground !");
                 String data = HttpRequest.submit(
                         url,
                         "POST",
@@ -90,7 +93,8 @@ public class Frag_Actualite extends Fragment implements Application{
                 );
 
                 try{
-                    JSONArray jsonArray = new JSONArray(data);
+                    String data_tmp = data.substring(data.indexOf("["), data.indexOf("]")+1);
+                    JSONArray jsonArray = new JSONArray(data_tmp);
                     if(jsonArray.length() != 0){
                         for(int i =0; i<jsonArray.length();i++){
                             Actualite actualite =  new Actualite();

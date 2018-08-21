@@ -4,7 +4,6 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,8 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,15 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import Adapter.ActualiteAdapter;
 import Fragments.Frag_Actualite;
 import Fragments.Frag_Predication;
-import Model.Actualite;
+import Fragments.frag_Meditation;
 import Tool.Application;
 import Tool.HttpRequest;
 
@@ -57,10 +48,11 @@ public class BaseActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         displaySelectedScreen(R.id.accueil);
 
-        if(getIntent().getExtras() != null){
+    /*    if(getIntent().getExtras() != null){
             switch (getIntent().getExtras().getString("origin")){
                 case "predication":
                     getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new Frag_Predication()).commit();
@@ -69,7 +61,7 @@ public class BaseActivity extends AppCompatActivity
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new Frag_Actualite()).commit();
         }
-
+*/
 
     }
 
@@ -128,10 +120,65 @@ public class BaseActivity extends AppCompatActivity
 
         switch (itemId) {
             case R.id.accueil:
-                fragment = new Accueil_fragment();
+                Log.i("BaseActivity_info", "Vous avez besoin de l'accueil!");
+                new AsyncTask(){
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        String data = HttpRequest.submit(
+                                url,
+                                "POST",
+                                new String[]{
+                                        "target"
+                                },
+                                new String[]{
+                                        "get_actu"
+                                }
+                        );
+                        return null;
+                    }
+                }.execute();
+                fragment = new Frag_Actualite();
                 break;
             case R.id.meditation:
-                fragment = new Meditation_fragment();
+                new AsyncTask(){
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        String data = HttpRequest.submit(
+                                url,
+                                "POST",
+                                new String[]{
+                                        "target"
+                                },
+                                new String[]{
+                                        "get_meditation"
+                                }
+                        );
+                        return null;
+                    }
+                }.execute();
+                fragment = new frag_Meditation();
+                break;
+            case R.id.predication:
+                new AsyncTask(){
+
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        String data = HttpRequest.submit(
+                                url,
+                                "POST",
+                                new String[]{
+                                        "target"
+                                },
+                                new String[]{
+                                        "get_meditation"
+                                }
+                        );
+                        return null;
+                    }
+                }.execute();
+                fragment = new Frag_Predication();
                 break;
             case R.id.event:
               //event()

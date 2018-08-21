@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +41,7 @@ public class PredicationDetail extends AppCompatActivity implements Application 
             load_data(PredicationDetail.this, i);
         }
     }
+
 
 
     protected void load_data(final Context context, final int idpredication) {
@@ -115,11 +120,5 @@ public class PredicationDetail extends AppCompatActivity implements Application 
         }.execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(PredicationDetail.this, Accueil.class);
-        intent.putExtra("origin", "predication");
-        startActivity(intent);
-        finish();
-    }
+
 }

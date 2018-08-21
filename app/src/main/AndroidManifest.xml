@@ -24,10 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Accueil"
+            android:name=".BaseActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".PredicationDetail"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
+        <activity
+            android:name=".MeditationDetail"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

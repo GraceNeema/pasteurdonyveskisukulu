@@ -1,18 +1,22 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,22 +26,30 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+//import Model.Actualité;
+import Adapter.PredicationAdapter;
+import Model.Actualite;
 import Model.Meditation;
+import Model.Predication;
 import Tool.Application;
+import Tool.BackgroundTask;
 import Tool.HttpRequest;
+import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.MeditationDetail;
 import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
 
+import static Tool.Application.url;
+
 /**
- * Created by YvonFlourAlvin on 14/08/2018.
+ * Created by Lenovo on 8/14/2018.
  */
 
-public class Frag_Predication extends Fragment implements Application {
+public class frag_Meditation extends Fragment implements Application {
     // ArrayList<Meditation> listitems = new ArrayList<>();
     RecyclerView MyRecyclerView;
     public Context context;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_predication, container, false);
+        return inflater.inflate(R.layout.meditation_fragment, container, false);
         //getActivity().setTitle("Méditation");
     }
 
@@ -46,7 +58,7 @@ public class Frag_Predication extends Fragment implements Application {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = view.getContext();
-        MyRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        MyRecyclerView = (RecyclerView) view.findViewById(R.id.cardView);
         load_data(view.getContext());
 
 
@@ -121,7 +133,7 @@ public class Frag_Predication extends Fragment implements Application {
 
 
         public YourListAdapter ( ArrayList<Meditation> list) {
-          this.list=list;
+            this.list=list;
 
         }
 
@@ -148,7 +160,7 @@ public class Frag_Predication extends Fragment implements Application {
 
             if(viewType==LAYOUT_ONE)
             {
-                view = LayoutInflater.from(context).inflate(R.layout.accueil_item_1, parent,false);
+                view = LayoutInflater.from(context).inflate(R.layout.recyclerview_items, parent,false);
                 viewHolder = new ViewHolderOne(view);
             }
             else
@@ -166,9 +178,10 @@ public class Frag_Predication extends Fragment implements Application {
             if(holder.getItemViewType()== LAYOUT_ONE)
             {
                 final ViewHolderOne vh =(ViewHolderOne)holder ;
-               // list.get(position);
-                vh.name.setText(list.get(position).getTitre());
-                vh.imageView.setVisibility(View.INVISIBLE);
+                // list.get(position);
+                vh.titreTextView.setText(list.get(position).getTitre());
+                vh.messageTextView.setText(list.get(position).getMessage());
+                vh.coverImageView.setVisibility(View.INVISIBLE);
                 new AsyncTask() {
 
                     @Override
@@ -188,19 +201,20 @@ public class Frag_Predication extends Fragment implements Application {
                             WeakReference weak = (WeakReference) objects.get(1);
                             ImageView img = (ImageView) weak.get();
                             // load_image.setVisibility(View.INVISIBLE);
-                            vh.imageView.setVisibility(View.VISIBLE);
+                            vh.coverImageView.setVisibility(View.VISIBLE);
                             img.setImageBitmap(bitmap);
                         }
                         super.onPostExecute(o);
                     }
-                }.execute(new WeakReference<ImageView>( vh.imageView));
+                }.execute(new WeakReference<ImageView>( vh.coverImageView));
             }
 
             else {
 
                 final ViewHolderTwo vaultItemHolder = (ViewHolderTwo) holder;
                 list.get(position);
-                vaultItemHolder.titre.setText(list.get(position).getTitre());
+                vaultItemHolder.titre.setText(list.get(position).getMessage());
+                vaultItemHolder.soustitre.setText(list.get(position).getTitre());
                 vaultItemHolder.img.setVisibility(View.INVISIBLE);
                 new AsyncTask() {
 
@@ -230,36 +244,65 @@ public class Frag_Predication extends Fragment implements Application {
             }
 
 
-            }
-
         }
 
-        //****************  VIEW HOLDER 1 ******************//
+    }
 
-        public class ViewHolderOne extends RecyclerView.ViewHolder {
+    //****************  VIEW HOLDER 1 ******************//
 
-            public TextView name;
-            public  ImageView imageView;
+    public class ViewHolderOne extends RecyclerView.ViewHolder {
 
-            public ViewHolderOne(View itemView) {
-                super(itemView);
-                name = (TextView)itemView.findViewById(R.id.txt2);
-                imageView=(ImageView)itemView.findViewById(R.id.img2);
-            }
-        }
+        public TextView titreTextView, messageTextView;
+        public ImageView coverImageView;
+        public Button lire;
 
 
-        //****************  VIEW HOLDER 2 ******************//
+        public ViewHolderOne(View itemView) {
+            super(itemView);
+            titreTextView = (TextView) itemView.findViewById(R.id.titreTextView);
+            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
+            coverImageView = (ImageView) itemView.findViewById(R.id.coverImageView);
+            lire = (Button) itemView.findViewById(R.id.btnlire);
+            lire.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
 
-        public class ViewHolderTwo extends RecyclerView.ViewHolder{
-            public TextView titre;
-            public  ImageView img;
-            public ViewHolderTwo(View itemView) {
-                super(itemView);
-                titre = (TextView)itemView.findViewById(R.id.txt1);
-                img=(ImageView)itemView.findViewById(R.id.img1);
 
 
-            }
+
+
+
+    }
+    }
+
+
+    //****************  VIEW HOLDER 2 ******************//
+
+    public class ViewHolderTwo extends RecyclerView.ViewHolder{
+        View mView;
+        public TextView titre;
+        public TextView soustitre;
+        public  ImageView img;
+        public ViewHolderTwo(View itemView) {
+            super(itemView);
+            mView=itemView;
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
+            titre = (TextView)itemView.findViewById(R.id.txt1);
+            img=(ImageView)itemView.findViewById(R.id.img1);
+            soustitre=(TextView)itemView.findViewById(R.id.soustitre);
+
+
         }
     }
+}

@@ -6,21 +6,20 @@ package Model;
 
 public class Meditation {
 
-    String titre, message, date;
-    int imageReSourceId;
-   // int isfav;
-    int isturned;
+    String titre, soustitre, message, date, imageReSource;
 
-    public int getIsturned() {
-        return isturned;
+
+
+    public String getSoustitre() {
+        return soustitre;
     }
 
-    public void setIsturned(int isturned) {
-        this.isturned = isturned;
+    public void setSoustitre(String soustitre) {
+        this.soustitre = soustitre;
     }
 
 
-    public String getCardName() {
+    public String getTitre() {
         return titre;
     }
 
@@ -28,12 +27,12 @@ public class Meditation {
         this.titre = titre;
     }
 
-    public int getImageResourceId() {
-        return imageReSourceId;
+    public String getImageResource() {
+        return imageReSource;
     }
 
-    public void setImageRef(int imageReSourceId) {
-        this.imageReSourceId = imageReSourceId;
+    public void setImageReSource(String imageReSource) {
+        this.imageReSource = imageReSource;
     }
     public String getMessage(){
         return message;

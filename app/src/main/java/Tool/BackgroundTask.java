@@ -28,7 +28,7 @@ public class BackgroundTask extends AsyncTask<Void,Void,Void> {
  RecyclerView recyclerView;
  RecyclerView.Adapter adapter;
  RecyclerView.LayoutManager layoutManager;
- String json_string="http://192.168.43.196/pasteurdonyveskisukulu-master/database.class.php";
+ String json_string="http://192.168.43.1/pasteurdonyveskisukulu-master/database.class.php";
 
     @Override
     protected void onPreExecute() {

@@ -49,7 +49,9 @@ public class BaseActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new Frag_Actualite()).commit();
+        }
 
     }
 
@@ -118,7 +120,7 @@ public class BaseActivity extends AppCompatActivity
                                         "target"
                                 },
                                 new String[]{
-                                        "get_meditation"
+                                        "get_theme"
                                 }
                         );
                         return null;
@@ -126,29 +128,15 @@ public class BaseActivity extends AppCompatActivity
                 }.execute();
                 fragment = new frag_Meditation();
                 break;
-            case R.id.predication:
-                new AsyncTask(){
 
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        String data = HttpRequest.submit(
-                                url,
-                                "POST",
-                                new String[]{
-                                        "target"
-                                },
-                                new String[]{
-                                        "get_meditation"
-                                }
-                        );
-                        return null;
-                    }
-                }.execute();
+            case R.id.predication:
+
                 fragment = new Frag_Predication();
                 break;
             case R.id.event:
               //event()
                 break;
+
         }
 
         //remplacement des différents fragments

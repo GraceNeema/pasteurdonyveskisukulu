@@ -1,8 +1,14 @@
-package Adapter;
+package Fragments;
+
+import android.annotation.SuppressLint;
+import android.app.Fragment;
 
 /**
  * Created by Lenovo on 8/22/2018.
  */
 
-public class frag_theme {
+@SuppressLint("NewApi")
+public class Frag_Theme extends Fragment {
+
+
 }

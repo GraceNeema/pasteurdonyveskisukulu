@@ -9,16 +9,15 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+//import Model.Actualité;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,15 +25,10 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-//import Model.Actualité;
-import Adapter.PredicationAdapter;
-import Model.Actualite;
-import Model.Meditation;
-import Model.Predication;
+import Model.Theme;
 import Tool.Application;
-import Tool.BackgroundTask;
 import Tool.HttpRequest;
-import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.MeditationDetail;
+import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.MeditationContent;
 import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
 
 import static Tool.Application.url;
@@ -44,29 +38,29 @@ import static Tool.Application.url;
  */
 
 public class frag_Meditation extends Fragment implements Application {
-    // ArrayList<Meditation> listitems = new ArrayList<>();
+
     RecyclerView MyRecyclerView;
-    public Context context;
+
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.meditation_fragment, container, false);
-        //getActivity().setTitle("Méditation");
+        return inflater.inflate(R.layout.meditaton_frag, container, false);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context = view.getContext();
-        MyRecyclerView = (RecyclerView) view.findViewById(R.id.cardView);
+        MyRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_med);
         load_data(view.getContext());
+
 
 
     }
 
     protected void load_data(final Context context) {
         new AsyncTask() {
-            ArrayList<Meditation> list_meditation = new ArrayList<>();
+            ArrayList<Theme> list_theme = new ArrayList<>();
 
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -77,7 +71,7 @@ public class frag_Meditation extends Fragment implements Application {
                                 "target"
                         },
                         new String[]{
-                                "get_meditation"
+                                "get_theme"
                         }
                 );
 
@@ -87,22 +81,21 @@ public class frag_Meditation extends Fragment implements Application {
                     // JSONArray jsonArray = new JSONArray(data);
                     if (jsonArray.length() != 0) {
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            Meditation meditation = new Meditation();
+                           Theme theme = new Theme();
                             JSONObject json_ob = jsonArray.getJSONObject(i);
                             // meditation.set(json_ob.getInt("idmeditation"));
-                            meditation.setTitre(json_ob.getString("titre"));
-                            meditation.setSoustitre(json_ob.getString("soustitre"));
-                            meditation.setMessage(json_ob.getString("message"));
-                            meditation.setImageReSource(json_ob.getString("image_ref"));
-                            //  predication.setOrateur(json_ob.getString("orateur"));
-                            meditation.setDate(json_ob.getString("date"));
+                            theme.setTitre(json_ob.getString("titre"));
+                            //meditation.setSoustitre(json_ob.getString("soustitre"));
 
-                            list_meditation.add(meditation);
+                            theme.setImageref(json_ob.getString("image_ref"));
+                            //  predication.setOrateur(json_ob.getString("orateur"));
+
+                            list_theme.add(theme);
                         }
                     }
-                    return list_meditation;
+                    return list_theme;
                 } catch (Exception e) {
-                    //   Log.e("Frag_Predication_info",e.getMessage());
+                    // Log.e("Frag_Predication_info","Line 84 : "+e.getMessage());
                 }
                 return null;
             }
@@ -111,9 +104,9 @@ public class frag_Meditation extends Fragment implements Application {
             @Override
             protected void onPostExecute(Object o) {
                 if (o != null) {
-                    ArrayList<Meditation> meds = (ArrayList<Meditation>) o;
+                    ArrayList<Theme> themes = (ArrayList<Theme>) o;
                     MyRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    MyRecyclerView.setAdapter(new YourListAdapter(meds));
+                    MyRecyclerView.setAdapter(new YourListAdapter(themes,context));
 
                 } else {
 
@@ -124,185 +117,99 @@ public class frag_Meditation extends Fragment implements Application {
 
     }
 
-    public class YourListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements  Application{
-
-        private static final int LAYOUT_ONE= 0;
-        private static final int LAYOUT_TWO= 1;
-        private ArrayList<Meditation> list;
+    public class YourListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Application {
 
 
+        public Context context;
 
-        public YourListAdapter ( ArrayList<Meditation> list) {
-            this.list=list;
+        ArrayList<Theme>theme;
 
+
+        public YourListAdapter(ArrayList<Theme>theme,Context context) {
+
+
+            this.theme=theme;
+            this.context=context;
         }
 
 
         @Override
-        public int getItemViewType(int position)
-        {
-            if(position%2==0)       //  position paire
-                return LAYOUT_ONE;
-            else                   //  position impaire
-                return LAYOUT_TWO;
+        public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_meditation,parent ,false);
+            return new Holder(view);
         }
 
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            final Holder vh =(Holder) holder ;
+            vh.titre.setText(theme.get(position).getTitre());
+            vh.imageView.setVisibility(View.INVISIBLE);
+            new AsyncTask() {
+
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    Bitmap bitmap = HttpRequest.donwload_bitmap(url +theme.get(position).getImageref());
+                    ArrayList<Object> objects1 = new ArrayList<>();
+                    objects1.add(bitmap);
+                    objects1.add(objects[0]);
+                    return objects1;
+                }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    ArrayList<Object> objects = (ArrayList<Object>) o;
+                    if (objects.get(0) != null) {
+                        Bitmap bitmap = (Bitmap) objects.get(0);
+                        WeakReference weak = (WeakReference) objects.get(1);
+                        ImageView img = (ImageView) weak.get();
+                        // load_image.setVisibility(View.INVISIBLE);
+                        vh.imageView.setVisibility(View.VISIBLE);
+                        img.setImageBitmap(bitmap);
+                    }
+                    super.onPostExecute(o);
+                }
+            }.execute(new WeakReference<ImageView>( vh.imageView));
+        }
+
+
+
+        /**
+         * Returns the total number of items in the data set held by the adapter.
+         *
+         * @return The total number of items in this adapter.
+         */
         @Override
         public int getItemCount() {
-            return list.size();
+            return theme.size();
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        class Holder extends RecyclerView.ViewHolder implements Application {
 
-            View view =null;
-            RecyclerView.ViewHolder viewHolder = null;
+            TextView titre;
+            ImageView imageView;
 
-            if(viewType==LAYOUT_ONE)
-            {
-                view = LayoutInflater.from(context).inflate(R.layout.recyclerview_items, parent,false);
-                viewHolder = new ViewHolderOne(view);
-            }
-            else
-            {
-                view = LayoutInflater.from(context).inflate(R.layout.accueil_item_2, parent,false);
-                viewHolder= new ViewHolderTwo(view);
-            }
+            public Holder(View itemView) {
+                super(itemView);
+                titre = itemView.findViewById(R.id.text);
 
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-
-            if(holder.getItemViewType()== LAYOUT_ONE)
-            {
-                final ViewHolderOne vh =(ViewHolderOne)holder ;
-                // list.get(position);
-                vh.titreTextView.setText(list.get(position).getTitre());
-                vh.messageTextView.setText(list.get(position).getMessage()+"\nSoustitre: "+list.get(position).getSoustitre());
-                vh.coverImageView.setVisibility(View.INVISIBLE);
-                new AsyncTask() {
-
+                imageView = itemView.findViewById(R.id.imageView);
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    protected Object doInBackground(Object[] objects) {
-                        Bitmap bitmap = HttpRequest.donwload_bitmap(url +list.get(position).getImageResource());
-                        ArrayList<Object> objects1 = new ArrayList<>();
-                        objects1.add(bitmap);
-                        objects1.add(objects[0]);
-                        return objects1;
+                    public void onClick(View view) {
+
+                        Intent i= new Intent(getActivity(), MeditationContent.class);
+                        startActivity(i);
                     }
+                });
 
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        ArrayList<Object> objects = (ArrayList<Object>) o;
-                        if (objects.get(0) != null) {
-                            Bitmap bitmap = (Bitmap) objects.get(0);
-                            WeakReference weak = (WeakReference) objects.get(1);
-                            ImageView img = (ImageView) weak.get();
-                            // load_image.setVisibility(View.INVISIBLE);
-                            vh.coverImageView.setVisibility(View.VISIBLE);
-                            img.setImageBitmap(bitmap);
-                        }
-                        super.onPostExecute(o);
-                    }
-                }.execute(new WeakReference<ImageView>( vh.coverImageView));
-            }
-
-            else {
-
-                final ViewHolderTwo vaultItemHolder = (ViewHolderTwo) holder;
-                list.get(position);
-                vaultItemHolder.titre.setText(list.get(position).getMessage());
-                vaultItemHolder.soustitre.setText(list.get(position).getTitre());
-                vaultItemHolder.img.setVisibility(View.INVISIBLE);
-                new AsyncTask() {
-
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        Bitmap bitmap = HttpRequest.donwload_bitmap(url + list.get(position).getImageResource());
-                        ArrayList<Object> objects1 = new ArrayList<>();
-                        objects1.add(bitmap);
-                        objects1.add(objects[0]);
-                        return objects1;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        ArrayList<Object> objects = (ArrayList<Object>) o;
-                        if (objects.get(0) != null) {
-                            Bitmap bitmap = (Bitmap) objects.get(0);
-                            WeakReference weak = (WeakReference) objects.get(1);
-                            ImageView img = (ImageView) weak.get();
-                            // load_image.setVisibility(View.INVISIBLE);
-                            vaultItemHolder.img.setVisibility(View.VISIBLE);
-                            img.setImageBitmap(bitmap);
-                        }
-                        super.onPostExecute(o);
-                    }
-                }.execute(new WeakReference<ImageView>( vaultItemHolder.img));
             }
 
 
         }
-
-    }
-
-    //****************  VIEW HOLDER 1 ******************//
-
-    public class ViewHolderOne extends RecyclerView.ViewHolder {
-
-        public TextView titreTextView, messageTextView;
-        public ImageView coverImageView;
-        public Button lire;
-
-
-        public ViewHolderOne(View itemView) {
-            super(itemView);
-            titreTextView = (TextView) itemView.findViewById(R.id.titreTextView);
-            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-            coverImageView = (ImageView) itemView.findViewById(R.id.coverImageView);
-            lire = (Button) itemView.findViewById(R.id.btnlire);
-            lire.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
-                    view.getContext().startActivity(intent);
-                }
-            });
-
-
-
-
-
-
-    }
     }
 
 
-    //****************  VIEW HOLDER 2 ******************//
-
-    public class ViewHolderTwo extends RecyclerView.ViewHolder{
-        View mView;
-        public TextView titre;
-        public TextView soustitre;
-        public  ImageView img;
-        public ViewHolderTwo(View itemView) {
-            super(itemView);
-            mView=itemView;
-            itemView.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
-                    view.getContext().startActivity(intent);
-                }
-            });
-            titre = (TextView)itemView.findViewById(R.id.txt1);
-            img=(ImageView)itemView.findViewById(R.id.img1);
-            soustitre=(TextView)itemView.findViewById(R.id.soustitre);
 
 
-        }
-    }
 }
+

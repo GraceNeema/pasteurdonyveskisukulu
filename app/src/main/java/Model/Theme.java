@@ -6,6 +6,7 @@ package Model;
 
 public class Theme {
     private String titre;
+    private  String imageref;
 
 
     public String getTitre() {
@@ -14,5 +15,12 @@ public class Theme {
 
     public void setTitre(String titre) {
         this.titre = titre;
+    }
+    public String getImageref() {
+        return imageref;
+    }
+
+    public void setImageref(String imageref) {
+        this.imageref = imageref;
     }
 }

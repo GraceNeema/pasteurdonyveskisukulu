@@ -3,6 +3,7 @@ package pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import Fragments.frag_Meditation;
 import Model.Meditation;
 import Tool.Application;
 import Tool.HttpRequest;
@@ -33,15 +33,31 @@ import Tool.HttpRequest;
  * Created by Lenovo on 8/22/2018.
  */
 
-public class Meditation_content extends AppCompatActivity implements Application{
+public class MeditationContent extends AppCompatActivity implements Application{
             RecyclerView  MyRecyclerView;
-            public Context context;
-    protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.meditation_fragment);
 
-                MyRecyclerView = (RecyclerView) findViewById(R.id.cardView);
-                load_data(getApplicationContext());
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.meditation_content);
+
+
+        MyRecyclerView = (RecyclerView) findViewById(R.id.cardView);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        mToolbar.setTitle(getString(R.string.app_name));
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        mToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        load_data(MeditationContent.this);
     }
     protected void load_data(final Context context) {
         new AsyncTask() {
@@ -70,7 +86,7 @@ public class Meditation_content extends AppCompatActivity implements Application
                             JSONObject json_ob = jsonArray.getJSONObject(i);
                             // meditation.set(json_ob.getInt("idmeditation"));
                             meditation.setTitre(json_ob.getString("titre"));
-                            //meditation.setSoustitre(json_ob.getString("soustitre"));
+                            meditation.setSoustitre(json_ob.getString("soustitre"));
                             meditation.setMessage(json_ob.getString("message"));
                             meditation.setImageReSource(json_ob.getString("image_ref"));
                             //  predication.setOrateur(json_ob.getString("orateur"));
@@ -92,7 +108,7 @@ public class Meditation_content extends AppCompatActivity implements Application
                 if (o != null) {
                     ArrayList<Meditation> meds = (ArrayList<Meditation>) o;
                     MyRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    MyRecyclerView.setAdapter(new YourListAdapter(meds));
+                    MyRecyclerView.setAdapter(new YourListAdapter(meds,context));
 
                 } else {
 
@@ -108,11 +124,13 @@ public class Meditation_content extends AppCompatActivity implements Application
         private static final int LAYOUT_ONE= 0;
         private static final int LAYOUT_TWO= 1;
         private ArrayList<Meditation> list;
+        public Context context;
 
 
 
-        public YourListAdapter ( ArrayList<Meditation> list) {
+        public YourListAdapter ( ArrayList<Meditation> list, Context context) {
             this.list=list;
+            this.context=context;
 
         }
 
@@ -159,7 +177,9 @@ public class Meditation_content extends AppCompatActivity implements Application
                 final ViewHolderOne vh =(ViewHolderOne)holder ;
                 // list.get(position);
                 vh.titreTextView.setText(list.get(position).getTitre());
+                vh.sousTitre.setText(list.get(position).getSoustitre());
                 vh.messageTextView.setText(list.get(position).getMessage());
+                vh.date.setText(list.get(position).getDate());
                 vh.coverImageView.setVisibility(View.INVISIBLE);
                 new AsyncTask() {
 
@@ -192,8 +212,10 @@ public class Meditation_content extends AppCompatActivity implements Application
 
                 final ViewHolderTwo vaultItemHolder = (ViewHolderTwo) holder;
                 list.get(position);
-                vaultItemHolder.titre.setText(list.get(position).getMessage());
-                vaultItemHolder.soustitre.setText(list.get(position).getTitre());
+                vaultItemHolder.titre.setText(list.get(position).getTitre());
+                vaultItemHolder.soustitre.setText(list.get(position).getSoustitre());
+                vaultItemHolder.messagetxt.setText(list.get(position).getMessage());
+                vaultItemHolder.datetxt.setText(list.get(position).getDate());
                 vaultItemHolder.img.setVisibility(View.INVISIBLE);
                 new AsyncTask() {
 
@@ -231,26 +253,35 @@ public class Meditation_content extends AppCompatActivity implements Application
 
     public class ViewHolderOne extends RecyclerView.ViewHolder {
 
-        public TextView titreTextView, messageTextView;
+        public TextView titreTextView, sousTitre, messageTextView, date;
         public ImageView coverImageView;
-        public Button lire;
+
 
 
         public ViewHolderOne(View itemView) {
             super(itemView);
             titreTextView = (TextView) itemView.findViewById(R.id.titreTextView);
-            messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
+            sousTitre = (TextView) itemView.findViewById(R.id.soustitreTextView);
+            messageTextView=(TextView)itemView.findViewById(R.id.message);
+            date=(TextView)itemView.findViewById(R.id.date);
             coverImageView = (ImageView) itemView.findViewById(R.id.coverImageView);
-            lire = (Button) itemView.findViewById(R.id.btnlire);
-            lire.setOnClickListener(new View.OnClickListener() {
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+
                 @Override
                 public void onClick(View view) {
-                  //  Intent intent = new Intent(view.getContext(), MeditationDetail.class);
-                  //  view.getContext().startActivity(intent);
+                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    String value1=messageTextView.getText().toString();
+                    String value2=titreTextView.getText().toString();
+                    String value3=date.getText().toString();
+                  //  Bitmap bitmap = ((BitmapDrawable) coverImageView.getDrawable()).getBitmap();
+                  //  intent.putExtra("img",bitmap);
+                    intent.putExtra("date",value3);
+                    intent.putExtra("titre",value2);
+                    intent.putExtra("message",value1);
+                    view.getContext().startActivity(intent);
                 }
             });
-
-
 
 
 
@@ -265,21 +296,36 @@ public class Meditation_content extends AppCompatActivity implements Application
         View mView;
         public TextView titre;
         public TextView soustitre;
+        public TextView messagetxt, datetxt;
         public  ImageView img;
         public ViewHolderTwo(View itemView) {
             super(itemView);
             mView=itemView;
+            titre = (TextView)itemView.findViewById(R.id.txt1);
+            img=(ImageView)itemView.findViewById(R.id.img1);
+            soustitre=(TextView)itemView.findViewById(R.id.soustitre);
+            messagetxt=(TextView)itemView.findViewById(R.id.msgtxt);
+            datetxt=(TextView)itemView.findViewById(R.id.datetxt);
+
             itemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
-                 //   Intent intent = new Intent(view.getContext(), MeditationDetail.class);
-                  //  view.getContext().startActivity(intent);
+                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    String value1=messagetxt.getText().toString();
+                    String value2=titre.getText().toString();
+                    String value3=datetxt.getText().toString();
+
+                //    Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
+                  //  intent.putExtra("img",bitmap);
+                    intent.putExtra("date",value3);
+                    intent.putExtra("titre",value2);
+                    intent.putExtra("message",value1);
+                    view.getContext().startActivity(intent);
+
+
                 }
             });
-            titre = (TextView)itemView.findViewById(R.id.txt1);
-            img=(ImageView)itemView.findViewById(R.id.img1);
-            soustitre=(TextView)itemView.findViewById(R.id.soustitre);
 
 
         }

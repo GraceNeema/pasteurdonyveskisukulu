@@ -1,12 +1,14 @@
 package pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -22,13 +24,26 @@ public class MeditationDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meditation_detail);
         final TextView details= (TextView)findViewById(R.id.detailTextView);
-         fab=(FloatingActionButton)findViewById(R.id.fab);
-         fab_whtsapp=(FloatingActionButton)findViewById(R.id.fab_whatsapp);
-         fab_fcbk=(FloatingActionButton)findViewById(R.id.fab_fbk);
-         Fab_extension= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_extension);
-         Fab_close=  AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-         Fab_rotation=  AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_rotation);
-         Fab_rotation_reverse= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_rotation_reverse);
+        final  TextView titre=(TextView)findViewById(R.id.titreTxt);
+        final TextView date=(TextView)findViewById(R.id.date);
+        final ImageView image= (ImageView) findViewById(R.id.img);
+        fab=(FloatingActionButton)findViewById(R.id.fab);
+        fab_whtsapp=(FloatingActionButton)findViewById(R.id.fab_whatsapp);
+        fab_fcbk=(FloatingActionButton)findViewById(R.id.fab_fbk);
+        Fab_extension= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_extension);
+        Fab_close=  AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        Fab_rotation=  AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_rotation);
+        Fab_rotation_reverse= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_rotation_reverse);
+
+        String value1 = super.getIntent().getExtras().getString("message");
+        details.setText(value1);
+        String value2=super.getIntent().getExtras().getString("titre");
+        titre.setText(value2);
+        String value3= super.getIntent().getExtras().getString("date");
+        date.setText("posté le "+ value3);
+        //Bitmap btmp = getIntent().getParcelableExtra("img");
+      //  image.setImageBitmap(btmp);
+
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -71,3 +86,4 @@ public class MeditationDetail extends AppCompatActivity {
 
     }
 }
+

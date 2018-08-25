@@ -5,5 +5,5 @@ package Tool;
  */
 
 public interface Application {
-    public final String  url  = "http://192.168.173.1:81/pasteurdonyveskisukulu/";
+    public final String  url  = "http://192.168.43.196:8081/pasteurdonyveskisukulu-master/";
 }

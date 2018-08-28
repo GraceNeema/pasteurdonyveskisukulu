@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.google.android.youtube.player.YouTubePlayerFragment;
+
 import Fragments.Frag_Actualite;
 import Fragments.Frag_Predication;
 import Fragments.frag_Meditation;
@@ -131,7 +133,8 @@ public class BaseActivity extends AppCompatActivity
 
             case R.id.predication:
 
-                fragment = new Frag_Predication();
+                 fragment = new Frag_Predication();
+
                 break;
             case R.id.event:
               //event()

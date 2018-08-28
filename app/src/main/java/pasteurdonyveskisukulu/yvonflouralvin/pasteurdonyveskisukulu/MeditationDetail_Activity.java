@@ -15,7 +15,7 @@ import android.widget.TextView;
  * Created by Lenovo on 8/16/2018.
  */
 
-public class MeditationDetail extends AppCompatActivity {
+public class MeditationDetail_Activity extends AppCompatActivity {
     FloatingActionButton fab,fab_whtsapp,fab_fcbk;
     Animation Fab_extension, Fab_close, Fab_rotation, Fab_rotation_reverse;
     Boolean isOpen=false;

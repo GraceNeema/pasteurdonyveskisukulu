@@ -27,12 +27,13 @@
             android:name=".BaseActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MeditationContent"
+            android:name=".MeditationContent_Activity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".MeditationDetail"
+            android:name=".MeditationDetail_Activity"
             android:theme="@style/AppTheme.NoActionBar" />
+
 
     </application>
 

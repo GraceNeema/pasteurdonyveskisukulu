@@ -28,10 +28,8 @@ import java.util.ArrayList;
 import Model.Theme;
 import Tool.Application;
 import Tool.HttpRequest;
-import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.MeditationContent;
+import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.MeditationContent_Activity;
 import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
-
-import static Tool.Application.url;
 
 /**
  * Created by Lenovo on 8/14/2018.
@@ -197,7 +195,7 @@ public class frag_Meditation extends Fragment implements Application {
                     @Override
                     public void onClick(View view) {
 
-                        Intent i= new Intent(getActivity(), MeditationContent.class);
+                        Intent i= new Intent(getActivity(), MeditationContent_Activity.class);
                         startActivity(i);
                     }
                 });

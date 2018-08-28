@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import Model.Predication;
 import Tool.Application;
-import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.PredicationDetail;
+import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.PredicationDetail_Activity;
 import pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu.R;
 
 /**
@@ -34,7 +34,7 @@ public class PredicationAdapter extends RecyclerView.Adapter<PredicationAdapter.
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.predication_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.predication_container, null);
         return new Holder(view);
     }
 
@@ -70,7 +70,7 @@ public class PredicationAdapter extends RecyclerView.Adapter<PredicationAdapter.
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, PredicationDetail.class);
+                    Intent intent = new Intent(context, PredicationDetail_Activity.class);
                     intent.putExtra("idpredication", actu.getIdpredication());
                     context.startActivity(intent);
                     ((Activity)context).finish();

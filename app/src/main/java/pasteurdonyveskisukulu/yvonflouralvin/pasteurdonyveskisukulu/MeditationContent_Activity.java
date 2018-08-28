@@ -3,7 +3,6 @@ package pasteurdonyveskisukulu.yvonflouralvin.pasteurdonyveskisukulu;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +31,7 @@ import Tool.HttpRequest;
  * Created by Lenovo on 8/22/2018.
  */
 
-public class MeditationContent extends AppCompatActivity implements Application{
+public class MeditationContent_Activity extends AppCompatActivity implements Application{
             RecyclerView  MyRecyclerView;
 
 
@@ -57,7 +55,7 @@ public class MeditationContent extends AppCompatActivity implements Application{
             }
         });
 
-        load_data(MeditationContent.this);
+        load_data(MeditationContent_Activity.this);
     }
     protected void load_data(final Context context) {
         new AsyncTask() {
@@ -270,7 +268,7 @@ public class MeditationContent extends AppCompatActivity implements Application{
 
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    Intent intent = new Intent(view.getContext(), MeditationDetail_Activity.class);
                     String value1=messageTextView.getText().toString();
                     String value2=titreTextView.getText().toString();
                     String value3=date.getText().toString();
@@ -311,7 +309,7 @@ public class MeditationContent extends AppCompatActivity implements Application{
 
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), MeditationDetail.class);
+                    Intent intent = new Intent(view.getContext(), MeditationDetail_Activity.class);
                     String value1=messagetxt.getText().toString();
                     String value2=titre.getText().toString();
                     String value3=datetxt.getText().toString();

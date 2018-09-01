@@ -1,5 +1,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,29 +16,141 @@
             android:visibility="visible"/>
 
 
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
 
-        <RelativeLayout android:id="@+id/relativeLayout"
+        <ImageView
+           android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/pastor" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@android:drawable/screen_background_dark_transparent"
+            android:orientation="vertical"
+
+
+            >
+            <android.support.v7.widget.CardView
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                card_view:cardCornerRadius="10dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginLeft="5dp"
+                >
+               <ImageView
+                   android:id="@+id/btnYoutube_player"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/playy"
+                   android:layout_marginLeft="-12dp"/>
+                <TextView
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Lire la vidéo"
+                    android:textColor="#000"/>
+
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/lireaudio"
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                card_view:cardCornerRadius="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                >
+                <ImageView
+                    android:id="@+id/playaudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/audio"
+                    android:layout_marginLeft="-12dp"/>
+                <TextView
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Lire l'audio"
+                    android:textColor="#000"/>
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_above="@+id/texte"
+            android:layout_alignParentLeft="true"
+            android:background="@android:drawable/screen_background_light_transparent"
+            >
+            <TextView
+                android:id="@+id/theme"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#000"
+                android:text="Participer à la nature Divine"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/texte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:layout_below="@+id/img"
+            android:padding="15dp"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:maxLines="4"
+           />
+        <TextView
+            android:id="@+id/lire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/texte"
+            android:layout_marginRight="15dp"
+            android:textColor="#9C27B0"
+            android:text="Voir le texte"
+            android:layout_marginBottom="5dp"
+            android:gravity="right"/>
 
-            <ImageView android:id="@+id/btnYoutube_player"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="center"
-                android:src="@drawable/video2"/>
+
             <TextView
-                android:id="@+id/texte"
+                android:id="@+id/texte_entier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:layout_below="@+id/lire"
                 android:padding="15dp"
-                android:layout_below="@+id/btnYoutube_player"
                 android:textColor="#000"
+                android:visibility="gone"
+                android:textSize="14dp"
+
                 />
+        <TextView
+            android:id="@+id/showless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/texte_entier"
+            android:layout_marginRight="15dp"
+            android:textColor="#9C27B0"
+            android:text="Ne plus voir le texte"
+            android:visibility="gone"
+            android:layout_marginBottom="5dp"
+            android:gravity="right"/>
 
-        </RelativeLayout>
 
+
+    </RelativeLayout>
 
 
 </android.support.v7.widget.CardView>

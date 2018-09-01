@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +91,8 @@ public class Frag_Predication extends Fragment implements Application{
 
                             pred.setTexte(json_ob.getString("texte"));
                             //  predication.setOrateur(json_ob.getString("orateur"));
+                            pred.setTexte_entier(json_ob.getString("texte_entier"));
+                            pred.setTheme(json_ob.getString("theme"));
 
                             list_pred.add(pred);
                         }
@@ -144,6 +148,9 @@ public class Frag_Predication extends Fragment implements Application{
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             final Holder vh = (Holder) holder;
             vh.text.setText(predications.get(position).getTexte());
+            vh.theme.setText(predications.get(position).getTheme());
+            //vh.texte_entier.setText(predications.get(position).getTexte_entier());
+            vh.texte_entier.setText(Html.fromHtml(predications.get(position).getTexte_entier()));
           //  vh.video.initialize(predications.get(position).getUrl(), this);
             final YouTubeThumbnailLoader.OnThumbnailLoadedListener  onThumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener(){
                 @Override
@@ -185,11 +192,18 @@ public class Frag_Predication extends Fragment implements Application{
             YouTubeThumbnailView video;
             RelativeLayout relativeLayout;
             ImageView playButton;
+            TextView theme,lire,showless;
+            TextView texte_entier;
+
 
             public Holder(View itemView) {
                 super(itemView);
                 video = itemView.findViewById(R.id.youtube_thumbnail);
                 text=itemView.findViewById(R.id.texte);
+                theme=itemView.findViewById(R.id.theme);
+                lire=itemView.findViewById(R.id.lire);
+                texte_entier=itemView.findViewById(R.id.texte_entier);
+                showless=itemView.findViewById(R.id.showless);
                 relativeLayout=itemView.findViewById(R.id.relativeLayout);
                 playButton=(ImageView)itemView.findViewById(R.id.btnYoutube_player);
 
@@ -203,6 +217,28 @@ public class Frag_Predication extends Fragment implements Application{
                     }
                 });
 
+               lire.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+
+
+                       lire.setVisibility(View.GONE);
+
+                       texte_entier.setVisibility(View.VISIBLE);
+                       showless.setVisibility(View.VISIBLE);
+
+
+
+                   }
+               });
+               showless.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       showless.setVisibility(View.GONE);
+                       texte_entier.setVisibility(View.GONE);
+                       lire.setVisibility(View.VISIBLE);
+                   }
+               });
             }
 
 

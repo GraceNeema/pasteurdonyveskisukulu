@@ -78,6 +78,21 @@ public class MeditationDetail_Activity extends AppCompatActivity {
                             }
                         }
                     });
+                    fab_fcbk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent fcbkintent = new Intent(Intent.ACTION_SEND);
+                            fcbkintent .setType("text/plain");
+                            fcbkintent.setPackage("com.facebook.katana");
+                            fcbkintent.putExtra(Intent.EXTRA_TEXT, details.getText());
+                            try {
+                                startActivity( fcbkintent);
+                            } catch (android.content.ActivityNotFoundException ex) {
+                               Toast.makeText(getApplicationContext(),"Facebook n'est pas installé sur votre appareil.",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
 
 
